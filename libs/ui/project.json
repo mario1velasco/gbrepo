@@ -17,6 +17,14 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "storybook": {
+      "options": {
+        "port": 4400,
+        "styles": [
+          "libs/ui/.storybook/styles.scss"
+        ]
+      }
     }
   }
 }
