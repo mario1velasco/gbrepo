@@ -15,6 +15,6 @@ export class DashboardComponent {
   private router = inject(Router);
 
   onClickButton(): void {
-    this.router.navigate(['/movies']);
+    this.router.navigate(['/images']);
   }
 }

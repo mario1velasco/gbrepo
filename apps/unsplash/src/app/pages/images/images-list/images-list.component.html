@@ -1,0 +1,5 @@
+<app-images-list-filter *ngIf="form" [form]="form"></app-images-list-filter>
+<app-images-list-results
+  *ngIf="imagesList.length > 0"
+  [imagesList]="imagesList"
+></app-images-list-results>

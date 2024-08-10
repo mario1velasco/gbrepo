@@ -1,0 +1,18 @@
+<form
+    *ngIf="form"
+    [formGroup]="form">
+    <div>
+        <label for="title">Title</label>
+        <input
+            id="title"
+            type="text"
+            formControlName="title" />
+    </div>
+    <div>
+        <label for="releaseYear">Release year</label>
+        <input
+            id="releaseYear"
+            type="text"
+            formControlName="releaseYear" />
+    </div>
+</form>

@@ -1,0 +1,41 @@
+<button (click)="onClickBackButton()" id="back-button">Back</button>
+<section *ngIf="image">
+  <h2 style="font-weight: bold">{{ image.title }}</h2>
+  <div style="display: flex; flex-direction: row; padding-bottom: 40px">
+    <img
+      height="300px"
+      width="200px"
+      src="{{ image.poster }}"
+      alt="image-image"
+    />
+    <div>
+      <b>Summary:</b>
+      <span>&nbsp;</span>
+      <span>{{ image.summary }}</span>
+    </div>
+  </div>
+  <h4>Details</h4>
+  <table>
+    <tr>
+      <td class="first-column">Box Office</td>
+      <td class="second-column">{{ image.box_office | million }}</td>
+    </tr>
+    <tr>
+      <td class="first-column">Budget</td>
+      <td class="second-column">{{ image.budget | million }}</td>
+    </tr>
+    <tr>
+      <td class="first-column">Duration</td>
+      <td class="second-column">{{ image.duration | duration }}</td>
+    </tr>
+
+    <tr>
+      <td class="first-column">Producers</td>
+      <td class="second-column">{{ image.producers.join(', ') }}</td>
+    </tr>
+    <tr>
+      <td class="first-column">Cinematographers</td>
+      <td class="second-column">{{ image.cinematographers }}</td>
+    </tr>
+  </table>
+</section>

@@ -1,0 +1,19 @@
+<ng-container *ngIf="imagesList">
+  <ul *ngFor="let image of imagesList; trackBy: trackByImageId">
+    <li class="image">
+      <div>
+        <span>
+          <b>{{ image.title }}</b>
+        </span>
+        <div>
+          <span>Release date: {{ image.release_date }}</span>
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <span>Budget: {{ image.budget | million }}</span>
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <span>Duration: {{ image.duration | duration }}</span>
+        </div>
+      </div>
+      <button (click)="onImageBtnClick(image)" [id]="image.id">Details</button>
+    </li>
+  </ul>
+</ng-container>
