@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { Image, ImagesList } from './image.types';
 import { ApiService } from '@gbrepo/business';
+import { ApiResponse } from 'unsplash-js/dist/helpers/response';
+import { Photos } from 'unsplash-js/dist/methods/search/types/response';
 
 @Injectable()
 export class ImagesService {
@@ -12,9 +14,9 @@ export class ImagesService {
    * The function `getList` retrieves a list of images from a specified API endpoint.
    * @returns An Observable of an array of ImagesList objects is being returned.
    */
-  getList(): Observable<ImagesList[]> {
-    const path = `/images`;
-    return this.apiService.get(path) as Observable<ImagesList[]>;
+  getList(): Observable<Photos> {
+    // const path = `/images`;
+    return this.apiService.get();
   }
   /**
    * This function retrieves a image by its ID from an API using TypeScript and returns it as an
@@ -23,8 +25,8 @@ export class ImagesService {
    * image. It is used to retrieve a specific image from the API by appending it to the URL endpoint.
    * @returns An Observable of type Image is being returned.
    */
-  get(id: string): Observable<Image> {
-    const path = `/images/${id}`;
-    return this.apiService.get(path) as Observable<Image>;
+  get(): Observable<Photos> {
+    // const path = `/images/${id}`;
+    return this.apiService.get();
   }
 }

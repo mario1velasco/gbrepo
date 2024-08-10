@@ -46,12 +46,19 @@ export class ImagesListComponent implements OnInit {
    * component properties and make API calls.
    */
   ngOnInit(): void {
+    // this.imagesService.get().((imagesList) => {
+    //   console.log(imagesList);
+    //   debugger;
+    // });
     this.imagesService
       .getList()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((imagesList) => {
-        this.imagesList = imagesList;
-        this.allImagesList = imagesList;
+        console.log(imagesList);
+        debugger;
+
+        // this.imagesList = imagesList;
+        // this.allImagesList = imagesList;
         this.cd.markForCheck();
       });
     this.form.valueChanges

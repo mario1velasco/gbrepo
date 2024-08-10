@@ -43,13 +43,13 @@ export class ImageComponent implements OnInit {
    */
   ngOnInit(): void {
     if (this.id) {
-      this.imagesService
-        .get(this.id)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((image) => {
-          this.image = image;
-          this.cd.markForCheck();
-        });
+      // this.imagesService
+      //   .get(this.id)
+      //   .pipe(takeUntilDestroyed(this.destroyRef))
+      //   .subscribe((image) => {
+      //     this.image = image;
+      //     this.cd.markForCheck();
+      //   });
     }
   }
 
