@@ -2,7 +2,15 @@
   "name": "@gbrepo/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "npx nx run unsplash:serve ",
+    "build": "npx nx run unsplash:build:production",
+    "lint": "npx nx run unsplash:lint",
+    "unit:test": "npx nx run unsplash:test",
+    "e2e:test": "npx nx run unsplash-e2e:e2e",
+    "e2e:test:open": "npx nx run unsplash-e2e:open-cypress",
+    "storybook": "npx nx run ui:storybook"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~18.1.0",
