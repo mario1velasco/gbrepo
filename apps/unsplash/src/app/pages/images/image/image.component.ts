@@ -10,13 +10,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { Location, NgIf } from '@angular/common';
 import { MillionPipe, DurationPipe } from '@gbrepo/business';
-import { ImagesService } from '../shared/image.service';
+import { ImageService } from '../shared/services/image.service';
 import { Image } from '../shared/image.types';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgIf, MillionPipe, DurationPipe],
-  providers: [ImagesService],
+  providers: [ImageService],
   selector: 'app-image',
   standalone: true,
   templateUrl: './image.component.html',
@@ -24,7 +24,7 @@ import { Image } from '../shared/image.types';
 })
 export class ImageComponent implements OnInit {
   // * Injectors
-  private imagesService = inject(ImagesService);
+  private imagesService = inject(ImageService);
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   private cd = inject(ChangeDetectorRef);

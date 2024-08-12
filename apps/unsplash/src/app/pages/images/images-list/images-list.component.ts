@@ -6,18 +6,20 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { ImagesService } from '../shared/image.service';
+import { ImageService } from '../shared/services/image.service';
 import { ImagesList } from '../shared/image.types';
 import { ImagesListResultsComponent } from './components/images-list-results/images-list-results.component';
 import { FormBuilder } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgIf } from '@angular/common';
 import { ImagesListFilterComponent } from './components/images-list-filter/images-list-filter.component';
+import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
+import { IMAGE_LIST_MOCK } from './mock/image-list.mock';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ImagesListResultsComponent, NgIf, ImagesListFilterComponent],
-  providers: [ImagesService],
+  providers: [ImageService],
   selector: 'app-images-list',
   standalone: true,
   templateUrl: './images-list.component.html',
@@ -25,13 +27,13 @@ import { ImagesListFilterComponent } from './components/images-list-filter/image
 })
 export class ImagesListComponent implements OnInit {
   // * Injectors
-  private imagesService = inject(ImagesService);
+  private imageService = inject(ImageService);
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
   private cd = inject(ChangeDetectorRef);
 
   // * Variables
-  public imagesList: ImagesList[] = [];
+  public imagesList: BasicPhoto[] = [];
   public allImagesList: ImagesList[] = [];
   public form = this.fb.group({
     title: [''],
@@ -46,21 +48,22 @@ export class ImagesListComponent implements OnInit {
    * component properties and make API calls.
    */
   ngOnInit(): void {
-    // this.imagesService.get().((imagesList) => {
+    // this.imageService.get().((imagesList) => {
     //   console.log(imagesList);
     //   debugger;
     // });
-    this.imagesService
-      .getList()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((imagesList) => {
-        console.log(imagesList);
-        debugger;
-
-        // this.imagesList = imagesList;
-        // this.allImagesList = imagesList;
-        this.cd.markForCheck();
-      });
+    this.imagesList = IMAGE_LIST_MOCK;
+    this.cd.markForCheck();
+    // this.imageService
+    //   .searchPhotos('nature', 1, 10)
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe((imagesList) => {
+    //     console.log(imagesList);
+    //     debugger;
+    //     this.imagesList = imagesList.results ? imagesList.results : [];
+    //     // this.allImagesList = imagesList;
+    //     this.cd.markForCheck();
+    //   });
     this.form.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
@@ -84,21 +87,21 @@ export class ImagesListComponent implements OnInit {
       releaseYear: string | null;
     }>
   ): void {
-    this.imagesList = this.allImagesList.filter((image) => {
-      if (
-        form.title &&
-        !image.title.toLowerCase().includes(form.title.toLowerCase())
-      ) {
-        return false;
-      }
-      if (
-        form.releaseYear &&
-        !image.release_date.substring(0, 4).includes(form.releaseYear)
-      ) {
-        return false;
-      }
-      return true;
-    });
+    // this.imagesList = this.allImagesList.filter((image) => {
+    //   if (
+    //     form.title &&
+    //     !image.title.toLowerCase().includes(form.title.toLowerCase())
+    //   ) {
+    //     return false;
+    //   }
+    //   if (
+    //     form.releaseYear &&
+    //     !image.release_date.substring(0, 4).includes(form.releaseYear)
+    //   ) {
+    //     return false;
+    //   }
+    //   return true;
+    // });
     this.cd.markForCheck();
   }
 }
