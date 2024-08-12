@@ -38,7 +38,11 @@ export class ImageService {
     color?: ColorId,
     orientation?: Orientation
   ) {
-    return this.handleUnsplashResponse<Photos[]>(
+    return this.handleUnsplashResponse<{
+      results: BasicPhoto[];
+      total: number;
+      total_pages: number;
+    }>(
       from(
         this.unsplash.search.getPhotos({
           query,
