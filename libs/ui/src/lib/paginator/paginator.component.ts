@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input,
+  inject,
+  input,
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,43 +19,55 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginatorComponent {
-  @Input() currentPage = 1;
-  @Input() pageSize = 10;
-  @Input() total = 0;
+  // * Injectors
+  private cd = inject(ChangeDetectorRef);
+
+  // * Inputs & Outputs
+  currentPage = input.required<number>();
+  pageSize = input.required<number>();
+  total = input.required<number>();
   @Output() pageChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();
 
+  // * Variables
   pageSizeOptions = ['10', '20', '50'];
 
+  // *************
+  // * GETTERS
+  // *************
   get from() {
-    return (this.currentPage - 1) * this.pageSize + 1;
+    return (this.currentPage() - 1) * this.pageSize() + 1;
   }
 
   get to() {
-    return Math.min(this.currentPage * this.pageSize, this.total);
+    return Math.min(this.currentPage() * this.pageSize(), this.total());
   }
 
   get totalPages() {
-    return Math.ceil(this.total / this.pageSize);
+    return Math.ceil(this.total() / this.pageSize());
   }
 
-  firstPage() {
+  // *************
+  // * EVENTS
+  // *************
+
+  onFirstPage() {
     this.pageChange.emit(1);
   }
 
-  previousPage() {
-    if (this.currentPage > 1) {
-      this.pageChange.emit(this.currentPage - 1);
+  onPreviousPage() {
+    if (this.currentPage() > 1) {
+      this.pageChange.emit(this.currentPage() - 1);
     }
   }
 
-  nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.pageChange.emit(this.currentPage + 1);
+  onNextPage() {
+    if (this.currentPage() < this.totalPages) {
+      this.pageChange.emit(this.currentPage() + 1);
     }
   }
 
-  lastPage() {
+  onLastPage() {
     this.pageChange.emit(this.totalPages);
   }
 

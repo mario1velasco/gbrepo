@@ -1,20 +1,55 @@
 <ng-container *ngIf="imagesList">
   <h1>Results</h1>
-  <ul *ngFor="let image of imagesList; trackBy: trackByImageId">
-    <li class="image">
-      <div>
-        <span>
-          <b>{{ image.id }}</b>
-        </span>
-        <div>
-          <span>Description: {{ image.description }}</span>
-          <span>&nbsp;&nbsp;&nbsp;</span>
-          <!-- <span>Budget: {{ image.budget | million }}</span>
-          <span>&nbsp;&nbsp;&nbsp;</span>
-          <span>Duration: {{ image.duration | duration }}</span> -->
+  <div class="flex flex-row">
+    <ui-paginator
+      class="w-full"
+      [currentPage]="currentPage()"
+      [pageSize]="pageSize()"
+      [total]="total()"
+      (pageChange)="pageChange.emit($event)"
+      (pageSizeChange)="pageSizeChange.emit($event)"
+    ></ui-paginator>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+    <ul *ngFor="let image of imagesList(); trackBy: trackByImageId">
+      <li class="image">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <img
+            src="{{ image.urls.regular }}"
+            alt="{{ image.alt_description }}"
+            class="w-full h-64 object-cover"
+          />
+          <div class="p-4">
+            <h2 class="text-lg font-semibold mb-2">{{ image.description }}</h2>
+            <div class="flex items-center space-x-2">
+              <img
+                src="{{ image.user.profile_image.small }}"
+                alt="{{ image.user.name }}"
+                class="w-8 h-8 rounded-full"
+              />
+              <div>
+                <p class="text-gray-700 font-medium">{{ image.user.name }}</p>
+                <p class="text-gray-500 text-sm">{{ image.user.username }}</p>
+              </div>
+            </div>
+            <div class="mt-4 flex justify-between items-center">
+              <span class="text-gray-500 text-sm">{{ image.likes }} likes</span>
+              <div class="flex flex-row gap-4">
+                <ui-button
+                  [text]="'Details'"
+                  (btnClick)="onImageBtnClick(image)"
+                ></ui-button>
+                <a
+                  href="{{ image.links.download }}"
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Download
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <button (click)="onImageBtnClick(image)" [id]="image.id">Details</button>
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </div>
 </ng-container>

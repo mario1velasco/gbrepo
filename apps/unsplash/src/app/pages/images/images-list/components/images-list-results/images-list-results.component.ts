@@ -3,15 +3,17 @@ import {
   Component,
   Input,
   inject,
+  input,
+  output,
 } from '@angular/core';
-import { NgIf, AsyncPipe, NgFor, CurrencyPipe } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-import { DurationPipe, MillionPipe } from '@gbrepo/business';
 import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
+import { ButtonComponent, PaginatorComponent } from '@gbrepo/ui';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf, AsyncPipe, NgFor, CurrencyPipe, DurationPipe, MillionPipe],
+  imports: [NgFor, ButtonComponent, NgIf, PaginatorComponent],
   selector: 'app-images-list-results',
   standalone: true,
   templateUrl: './images-list-results.component.html',
@@ -22,7 +24,15 @@ export class ImagesListResultsComponent {
   private router = inject(Router);
 
   // * Inputs
-  @Input() public imagesList: BasicPhoto[] | undefined;
+  imagesList = input.required<BasicPhoto[]>();
+  // * Outputs
+  pageChange = output<number>();
+  pageSizeChange = output<number>();
+
+  // * Variables
+  currentPage = input.required<number>();
+  pageSize = input.required<number>();
+  total = input.required<number>();
 
   /**
    * The trackByImageId function in TypeScript returns the unique identifier of a image item based on
@@ -52,4 +62,12 @@ export class ImagesListResultsComponent {
   onImageBtnClick(image: BasicPhoto) {
     this.router.navigate(['/images', image.id]);
   }
+
+  // onPageChange(page: number) {
+  //   console.log(page);
+  // }
+
+  // onPageSizeChange(newPageSize: number) {
+  //   console.log(newPageSize);
+  // }
 }
