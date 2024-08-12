@@ -22,12 +22,11 @@ export class ImageService {
   private localStorageService = inject(LocalStorageService);
   // * Private variables
   private readonly unsplash;
-  private _photos: BasicPhoto[] = [];
 
   constructor() {
     // Create an instance of the Unsplash API with your access key
     this.unsplash = createApi({
-      accessKey: 'jUlamOylY7AnQ6ySwEjDHD-ayY3OUVNA7lEeouODF40', // Replace with your actual access key
+      accessKey: 'XXXXXXX', // Replace with your actual access key
     });
   }
 
