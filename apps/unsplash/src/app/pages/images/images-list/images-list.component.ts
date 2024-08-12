@@ -56,6 +56,7 @@ export class ImagesListComponent implements OnInit {
     //   debugger;
     // });
     this.imagesList = IMAGE_LIST_MOCK.results;
+    this.imageService.photos = this.imagesList;
     this.total.set(IMAGE_LIST_MOCK.total);
 
     this.cd.markForCheck();

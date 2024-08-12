@@ -1,15 +1,6 @@
 <ng-container *ngIf="imagesList">
   <h1>Results</h1>
-  <div class="flex flex-row">
-    <ui-paginator
-      class="w-full"
-      [currentPage]="currentPage()"
-      [pageSize]="pageSize()"
-      [total]="total()"
-      (pageChange)="pageChange.emit($event)"
-      (pageSizeChange)="pageSizeChange.emit($event)"
-    ></ui-paginator>
-  </div>
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
     <ul *ngFor="let image of imagesList(); trackBy: trackByImageId">
       <li class="image">
@@ -39,17 +30,21 @@
                   [text]="'Details'"
                   (btnClick)="onImageBtnClick(image)"
                 ></ui-button>
-                <a
-                  href="{{ image.links.download }}"
-                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Download
-                </a>
               </div>
             </div>
           </div>
         </div>
       </li>
     </ul>
+  </div>
+  <div class="flex flex-row pb-20">
+    <ui-paginator
+      class="w-full"
+      [currentPage]="currentPage()"
+      [pageSize]="pageSize()"
+      [total]="total()"
+      (pageChange)="pageChange.emit($event)"
+      (pageSizeChange)="pageSizeChange.emit($event)"
+    ></ui-paginator>
   </div>
 </ng-container>
