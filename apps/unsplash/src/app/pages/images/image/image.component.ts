@@ -6,16 +6,16 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { Location, NgIf } from '@angular/common';
-import { MillionPipe, DurationPipe } from '@gbrepo/business';
+import { DatePipe, Location, NgIf } from '@angular/common';
+import { MillionPipe } from '@gbrepo/business';
 import { ImageService } from '../shared/services/image.service';
-import { Image } from '../shared/image.types';
+import { Basic } from 'unsplash-js/dist/methods/photos/types';
+import { ButtonComponent } from '@gbrepo/ui';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf, MillionPipe, DurationPipe],
+  imports: [NgIf, MillionPipe, DatePipe, ButtonComponent],
   providers: [ImageService],
   selector: 'app-image',
   standalone: true,
@@ -31,7 +31,7 @@ export class ImageComponent implements OnInit {
   private location = inject(Location);
 
   // * Variables
-  public image: Image | undefined;
+  public image: Basic | undefined;
   public id: string | null = this.route.snapshot.paramMap.get('imageId');
 
   // *****************
@@ -43,14 +43,18 @@ export class ImageComponent implements OnInit {
    */
   ngOnInit(): void {
     if (this.id) {
-      // this.imagesService
-      //   .get(this.id)
-      //   .pipe(takeUntilDestroyed(this.destroyRef))
-      //   .subscribe((image) => {
-      //     this.image = image;
-      //     this.cd.markForCheck();
-      //   });
+      this.image = this.imagesService.findPhoto(this.id);
     }
+    // TODO Missing implementation
+    // if (!this.image) {
+    //   this.imagesService
+    //     .get(this.id)
+    //     .pipe(takeUntilDestroyed(this.destroyRef))
+    //     .subscribe((image) => {
+    //       this.image = image;
+    //       this.cd.markForCheck();
+    //     });
+    // }
   }
 
   // ********

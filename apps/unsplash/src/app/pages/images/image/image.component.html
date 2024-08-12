@@ -1,41 +1,92 @@
-<button (click)="onClickBackButton()" id="back-button">Back</button>
-<section *ngIf="image">
-  <h2 style="font-weight: bold">{{ image.title }}</h2>
-  <div style="display: flex; flex-direction: row; padding-bottom: 40px">
+@if (image) {
+
+<div class="flex flex-col md:flex-row h-screen">
+  <div class="md:w-1/2 h-full md:h-auto">
     <img
-      height="300px"
-      width="200px"
-      src="{{ image.poster }}"
-      alt="image-image"
+      [src]="image.urls.regular"
+      [alt]="image.alt_description"
+      class="w-full h-full object-cover"
     />
+  </div>
+
+  <div class="md:w-1/2 p-6 flex flex-col justify-between">
     <div>
-      <b>Summary:</b>
-      <span>&nbsp;</span>
-      <span>{{ image.summary }}</span>
+      <h2 class="text-3xl font-semibold mb-4">{{ image.description }}</h2>
+
+      <div class="flex items-center space-x-3 mb-4">
+        <img
+          [src]="image.user.profile_image.medium"
+          [alt]="image.user.name"
+          class="w-12 h-12 rounded-full"
+        />
+        <div>
+          <p class="text-gray-800 font-medium">{{ image.user.name }}</p>
+          <a
+            [href]="image.user.links.html"
+            target="_blank"
+            class="text-blue-500 hover:underline"
+            >{{ image.user.username }}</a
+          >
+        </div>
+      </div>
+
+      <div class="hidden md:block">
+        <p class="text-gray-600 mb-2">
+          Uploaded on {{ image.created_at | date }}
+        </p>
+
+        <div class="flex space-x-4 mb-4">
+          <span class="text-gray-600">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 inline-block mr-1"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            {{ image.likes }}
+          </span>
+          <span class="text-gray-600">
+            {{ image.width }} x {{ image.height }}
+          </span>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="text-lg font-semibold mb-2">About the Photographer</h3>
+          <p class="text-gray-600" *ngIf="image.user.bio">
+            {{ image.user.bio }}
+          </p>
+          <p class="text-gray-600" *ngIf="image.user.location">
+            Location: {{ image.user.location }}
+          </p>
+          <a
+            *ngIf="image.user.portfolio_url"
+            [href]="image.user.portfolio_url"
+            target="_blank"
+            class="text-blue-500 hover:underline"
+            >View Portfolio</a
+          >
+        </div>
+      </div>
+
+      <div
+        class="mt-4 md:mt-0 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4"
+      >
+        <a
+          [href]="image.links.download"
+          target="_blank"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block"
+        >
+          Download
+        </a>
+        <ui-button [text]="'Back'" (btnClick)="onClickBackButton()"></ui-button>
+      </div>
     </div>
   </div>
-  <h4>Details</h4>
-  <table>
-    <tr>
-      <td class="first-column">Box Office</td>
-      <td class="second-column">{{ image.box_office | million }}</td>
-    </tr>
-    <tr>
-      <td class="first-column">Budget</td>
-      <td class="second-column">{{ image.budget | million }}</td>
-    </tr>
-    <tr>
-      <td class="first-column">Duration</td>
-      <td class="second-column">{{ image.duration | duration }}</td>
-    </tr>
-
-    <tr>
-      <td class="first-column">Producers</td>
-      <td class="second-column">{{ image.producers.join(', ') }}</td>
-    </tr>
-    <tr>
-      <td class="first-column">Cinematographers</td>
-      <td class="second-column">{{ image.cinematographers }}</td>
-    </tr>
-  </table>
-</section>
+</div>
+}
