@@ -5,6 +5,7 @@ import {
   DestroyRef,
   OnInit,
   inject,
+  signal,
 } from '@angular/core';
 import { ImageService } from '../shared/services/image.service';
 import { ImagesList } from '../shared/image.types';
@@ -34,11 +35,13 @@ export class ImagesListComponent implements OnInit {
 
   // * Variables
   public imagesList: BasicPhoto[] = [];
-  public allImagesList: ImagesList[] = [];
   public form = this.fb.group({
     title: [''],
     releaseYear: [''],
   });
+  public currentPage = signal(1);
+  public pageSize = signal(10);
+  public total = signal(0);
 
   // *****************
   // * Lifecycle hooks
@@ -52,7 +55,9 @@ export class ImagesListComponent implements OnInit {
     //   console.log(imagesList);
     //   debugger;
     // });
-    this.imagesList = IMAGE_LIST_MOCK;
+    this.imagesList = IMAGE_LIST_MOCK.results;
+    this.total.set(IMAGE_LIST_MOCK.total);
+
     this.cd.markForCheck();
     // this.imageService
     //   .searchPhotos('nature', 1, 10)
@@ -71,9 +76,32 @@ export class ImagesListComponent implements OnInit {
       });
   }
 
+  // ************
+  // * EVENTS
+  // ************
+  onPageChange(newPage: number) {
+    this.searchPhotos('nature', newPage, this.pageSize());
+    this.currentPage.set(newPage);
+  }
+
+  onPageSizeChange(newPageSize: number) {
+    this.searchPhotos('nature', this.currentPage(), newPageSize);
+    this.pageSize.set(newPageSize);
+  }
+
   // *****************
   // * Private methods
   // *****************
+  private searchPhotos(type = 'nature', currentPage = 1, pageSize = 10): void {
+    this.imageService
+      .searchPhotos(type, currentPage, pageSize)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((imagesList) => {
+        this.imagesList = imagesList.results ? imagesList.results : [];
+        this.imageService.photos = imagesList.results;
+        this.cd.markForCheck();
+      });
+  }
   /**
    * The function `updateImagesList` filters a list of images based on provided title and release year
    * criteria.
