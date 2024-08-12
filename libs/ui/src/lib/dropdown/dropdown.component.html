@@ -6,7 +6,7 @@
       id="options-menu"
       aria-haspopup="true"
       aria-expanded="true"
-      (click)="toggleDropdown()"
+      (click)="onCLickToggleDropdown()"
     >
       {{ selectedOption || placeholder }}
       <svg
@@ -38,7 +38,7 @@
         *ngFor="let option of options"
         class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
         role="menuitem"
-        (click)="selectOption(option)"
+        (click)="onClickSelectOption(option)"
         >{{ option }}</a
       >
     </div>

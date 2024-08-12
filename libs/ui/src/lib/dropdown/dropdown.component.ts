@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
+  inject,
   Input,
   Output,
 } from '@angular/core';
@@ -16,20 +18,29 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownComponent {
+  // * Injectors
+  private cd = inject(ChangeDetectorRef);
+
+  // * Inputs & Outputs
   @Input() options: string[] = [];
   @Input() placeholder = 'Select an option';
+  @Input() selectedOption: string | null = null;
   @Output() selectionChange = new EventEmitter<string>();
 
-  selectedOption: string | null = null;
+  // * Variables
   isOpen = false;
 
-  toggleDropdown() {
+  // *************
+  // * EVENTS
+  // *************
+  onCLickToggleDropdown() {
     this.isOpen = !this.isOpen;
   }
 
-  selectOption(option: string) {
+  onClickSelectOption(option: string) {
     this.selectedOption = option;
     this.isOpen = false;
+    this.cd.markForCheck();
     this.selectionChange.emit(option);
   }
 }
