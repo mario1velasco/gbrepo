@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { from, map, Observable } from 'rxjs';
 import {
   Collections,
@@ -14,16 +14,20 @@ import {
   Full as FullTopic,
 } from 'unsplash-js/dist/methods/topics/types';
 import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
+import { LocalStorageService } from '@gbrepo/business';
 
 @Injectable()
 export class ImageService {
+  // * Injectors
+  private localStorageService = inject(LocalStorageService);
+  // * Private variables
   private readonly unsplash;
   private _photos: BasicPhoto[] = [];
 
   constructor() {
     // Create an instance of the Unsplash API with your access key
     this.unsplash = createApi({
-      accessKey: 'XXXXXXX', // Replace with your actual access key
+      accessKey: 'jUlamOylY7AnQ6ySwEjDHD-ayY3OUVNA7lEeouODF40', // Replace with your actual access key
     });
   }
 
@@ -31,15 +35,15 @@ export class ImageService {
   // * General Methods
   // ***********************************
   set photos(photos: BasicPhoto[]) {
-    this._photos = photos;
+    this.localStorageService.saveData('photos', photos);
   }
 
   get photos() {
-    return this._photos;
+    return this.localStorageService.getData('photos') || [];
   }
 
   findPhoto(id: string) {
-    return this._photos.find((result) => result.id === id);
+    return this.photos.find((result) => result.id === id);
   }
 
   // ***********************************
