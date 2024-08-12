@@ -18,12 +18,28 @@ import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
 @Injectable()
 export class ImageService {
   private readonly unsplash;
+  private _photos: BasicPhoto[] = [];
 
   constructor() {
     // Create an instance of the Unsplash API with your access key
     this.unsplash = createApi({
       accessKey: 'XXXXXXX', // Replace with your actual access key
     });
+  }
+
+  // ***********************************
+  // * General Methods
+  // ***********************************
+  set photos(photos: BasicPhoto[]) {
+    this._photos = photos;
+  }
+
+  get photos() {
+    return this._photos;
+  }
+
+  findPhoto(id: string) {
+    return this._photos.find((result) => result.id === id);
   }
 
   // ***********************************
