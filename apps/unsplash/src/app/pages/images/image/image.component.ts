@@ -1,13 +1,11 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  DestroyRef,
   OnInit,
   inject,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { DatePipe, Location, NgIf } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe, NgIf } from '@angular/common';
 import { MillionPipe } from '@gbrepo/business';
 import { ImageService } from '../shared/services/image.service';
 import { Basic } from 'unsplash-js/dist/methods/photos/types';
@@ -25,10 +23,8 @@ import { ButtonComponent } from '@gbrepo/ui';
 export class ImageComponent implements OnInit {
   // * Injectors
   private imagesService = inject(ImageService);
-  private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private cd = inject(ChangeDetectorRef);
-  private location = inject(Location);
 
   // * Variables
   public image: Basic | undefined;
@@ -45,22 +41,15 @@ export class ImageComponent implements OnInit {
     if (this.id) {
       this.image = this.imagesService.findPhoto(this.id);
     }
-    // TODO Missing implementation
-    // if (!this.image) {
-    //   this.imagesService
-    //     .get(this.id)
-    //     .pipe(takeUntilDestroyed(this.destroyRef))
-    //     .subscribe((image) => {
-    //       this.image = image;
-    //       this.cd.markForCheck();
-    //     });
-    // }
+    if (!this.image) {
+      this.router.navigate(['/images']);
+    }
   }
 
   // ********
   // * Events
   // ********
   onClickBackButton(): void {
-    this.location.back();
+    this.router.navigate(['/images']);
   }
 }
