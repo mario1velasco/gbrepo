@@ -55,7 +55,8 @@ export class ImageService {
     page = 1,
     perPage = 10,
     color?: ColorId,
-    orientation?: Orientation
+    orientation?: Orientation,
+    orderBy: 'relevant' | 'latest' | 'editorial' = 'relevant'
   ) {
     return this.handleUnsplashResponse<{
       results: BasicPhoto[];
@@ -69,6 +70,7 @@ export class ImageService {
           perPage,
           color,
           orientation,
+          orderBy,
         })
       )
     );
