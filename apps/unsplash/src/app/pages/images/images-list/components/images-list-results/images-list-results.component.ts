@@ -1,19 +1,27 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   inject,
   input,
   output,
 } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { DOCUMENT, NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
 import { ButtonComponent, PaginatorComponent } from '@gbrepo/ui';
+import { fromEvent, startWith, map, distinctUntilChanged } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ScrollEndDirective } from '@gbrepo/business';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgFor, ButtonComponent, NgIf, PaginatorComponent],
+  imports: [
+    NgFor,
+    ButtonComponent,
+    NgIf,
+    PaginatorComponent,
+    ScrollEndDirective,
+  ],
   selector: 'app-images-list-results',
   standalone: true,
   templateUrl: './images-list-results.component.html',
@@ -25,14 +33,15 @@ export class ImagesListResultsComponent {
 
   // * Inputs
   imagesList = input.required<BasicPhoto[]>();
+  currentPage = input.required<number>();
+  pageSize = input.required<number>();
+  total = input.required<number>();
   // * Outputs
   pageChange = output<number>();
   pageSizeChange = output<number>();
 
   // * Variables
-  currentPage = input.required<number>();
-  pageSize = input.required<number>();
-  total = input.required<number>();
+  public device = toSignal(this.getDevice());
 
   /**
    * The trackByImageId function in TypeScript returns the unique identifier of a image item based on
@@ -63,11 +72,23 @@ export class ImagesListResultsComponent {
     this.router.navigate(['/images', image.id]);
   }
 
-  // onPageChange(page: number) {
-  //   console.log(page);
-  // }
+  onScrollEnd() {
+    if (this.device() === 'mobile') {
+      this.pageSizeChange.emit(this.pageSize() + 10);
+    }
+  }
 
-  // onPageSizeChange(newPageSize: number) {
-  //   console.log(newPageSize);
-  // }
+  /**********************
+   * PRIVATE FUNCTIONS *****
+   ************************/
+  private getDevice() {
+    const window = inject(DOCUMENT).defaultView!;
+    return fromEvent(window, 'resize').pipe(
+      startWith(window.innerWidth),
+      map(() => {
+        return window.innerWidth >= 1024 ? 'desktop' : 'mobile';
+      }),
+      distinctUntilChanged()
+    );
+  }
 }
