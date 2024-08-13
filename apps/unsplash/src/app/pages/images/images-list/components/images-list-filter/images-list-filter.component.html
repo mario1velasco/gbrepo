@@ -11,9 +11,10 @@
   <form
     *ngIf="form && isFormVisible"
     [formGroup]="form"
-    class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md transition-all duration-300"
+    class="mx-auto p-6 bg-white rounded-lg shadow-md transition-all duration-300"
+    [class.max-w-full]="isMaximized"
+    [class.max-w-md]="!isMaximized"
     (ngSubmit)="formSubmit.emit()"
-    [ngClass]="{ 'max-w-full': isMaximized }"
   >
     <div class="mb-4">
       <label
