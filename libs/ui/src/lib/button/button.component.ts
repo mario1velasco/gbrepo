@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ButtonComponent {
   @Input() disabled = false;
+  @Input() type: 'button' | 'submit' = 'button';
   @Input() text: string | undefined;
   @Output() btnClick = new EventEmitter<void>();
 }
