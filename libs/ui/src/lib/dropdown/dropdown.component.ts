@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  forwardRef,
   inject,
   Input,
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'ui-dropdown',
@@ -16,8 +19,15 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dropdown.component.html',
   styleUrl: './dropdown.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DropdownComponent),
+      multi: true,
+    },
+  ],
 })
-export class DropdownComponent {
+export class DropdownComponent implements ControlValueAccessor {
   // * Injectors
   private cd = inject(ChangeDetectorRef);
 
@@ -42,5 +52,21 @@ export class DropdownComponent {
     this.isOpen = false;
     this.cd.markForCheck();
     this.selectionChange.emit(option);
+  }
+  // * ControlValueAccessor implementation
+  onChange = () => {};
+  onTouched = () => {};
+
+  writeValue(value: string): void {
+    this.selectedOption = value;
+    this.cd.markForCheck();
+  }
+
+  registerOnChange(fn: () => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
   }
 }
