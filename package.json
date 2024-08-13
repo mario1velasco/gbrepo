@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "npx nx run unsplash:serve ",
+    "start": "npx nx run unsplash:serve",
     "build": "npx nx run unsplash:build:production",
     "lint": "npx nx run unsplash:lint",
     "unit:test": "npx nx run unsplash:test",
     "e2e:test": "npx nx run unsplash-e2e:e2e",
     "e2e:test:open": "npx nx run unsplash-e2e:open-cypress",
-    "storybook": "npx nx run ui:storybook"
+    "storybook": "npx nx run ui:storybook",
+    "postbuild": "node post-build.js"
   },
   "private": true,
   "dependencies": {
@@ -22,6 +23,7 @@
     "@angular/platform-browser-dynamic": "~18.1.0",
     "@angular/router": "~18.1.0",
     "@nx/angular": "19.5.3",
+    "@vercel/static-build": "^2.5.18",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rxjs": "~7.8.0",
