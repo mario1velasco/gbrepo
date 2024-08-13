@@ -1,18 +1,58 @@
-<form
-    *ngIf="form"
-    [formGroup]="form">
-    <div>
-        <label for="title">Title</label>
-        <input
-            id="title"
-            type="text"
-            formControlName="title" />
+<div class="relative">
+  <div
+    class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8"
+  >
+    <ui-button
+      class="mb-4"
+      (btnClick)="toggleFormVisibility()"
+      [text]="isFormVisible ? 'Hide Filters' : 'Show Filters'"
+    ></ui-button>
+  </div>
+  <form
+    *ngIf="form && isFormVisible"
+    [formGroup]="form"
+    class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md transition-all duration-300"
+    (ngSubmit)="onSubmit()"
+    [ngClass]="{ 'max-w-full': isMaximized }"
+  >
+    <div class="mb-4">
+      <label for="order-by" class="block text-sm font-medium text-gray-700 mb-2"
+        >Order By*</label
+      >
+      <ui-dropdown
+        formControlName="orderBy"
+        [options]="['Option 1', 'Option 2', 'Option 3']"
+        placeholder="Choose something"
+      >
+      </ui-dropdown>
     </div>
-    <div>
-        <label for="releaseYear">Release year</label>
-        <input
-            id="releaseYear"
-            type="text"
-            formControlName="releaseYear" />
+    <div class="mb-4">
+      <label for="type" class="block text-sm font-medium text-gray-700 mb-2"
+        >Type*</label
+      >
+      <input
+        id="type"
+        type="text"
+        formControlName="type"
+        class="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+      />
     </div>
-</form>
+
+    <div class="flex justify-between items-center mt-10">
+      <ui-button
+        type="submit"
+        [disabled]="form.invalid"
+        class="w-full mr-2"
+        [text]="'Submit'"
+      ></ui-button>
+
+      <button
+        type="button"
+        class="hidden md:block bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+        (click)="toggleMaximize()"
+      >
+        {{ isMaximized ? 'Minimize' : 'Maximize' }}
+      </button>
+    </div>
+  </form>
+</div>
