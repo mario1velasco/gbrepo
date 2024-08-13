@@ -5,11 +5,10 @@ import {
   input,
   output,
 } from '@angular/core';
-import { DOCUMENT, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
 import { ButtonComponent, PaginatorComponent } from '@gbrepo/ui';
-import { fromEvent, startWith, map, distinctUntilChanged } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DeviceService, ScrollEndDirective } from '@gbrepo/business';
 
@@ -73,6 +72,9 @@ export class ImagesListResultsComponent {
     this.router.navigate(['/images', image.id]);
   }
 
+  /**
+   * The `onScrollEnd` function increases the page size by 10 if the device is mobile.
+   */
   onScrollEnd() {
     if (this.device() === 'mobile') {
       this.pageSizeChange.emit(this.pageSize() + 10);
