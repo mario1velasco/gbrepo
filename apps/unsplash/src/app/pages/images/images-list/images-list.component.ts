@@ -10,7 +10,7 @@ import {
 import { ImageService } from '../shared/services/image.service';
 import { ImageFormType, OrderBy } from '../shared/image.types';
 import { ImagesListResultsComponent } from './components/images-list-results/images-list-results.component';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgIf } from '@angular/common';
 import { ImagesListFilterComponent } from './components/images-list-filter/images-list-filter.component';
@@ -36,8 +36,8 @@ export class ImagesListComponent implements OnInit {
   // * Variables
   public imagesList: BasicPhoto[] = [];
   public form: ImageFormType = this.fb.group({
-    orderBy: [''],
-    type: [''],
+    orderBy: ['', Validators.required],
+    type: ['', Validators.required],
   });
   public currentPage = signal(1);
   public pageSize = signal(10);
