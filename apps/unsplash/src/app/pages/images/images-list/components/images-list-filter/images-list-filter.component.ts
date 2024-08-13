@@ -1,5 +1,11 @@
 import { NgClass, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ImageFormType } from '../../../shared/image.types';
 import { ButtonComponent, DropdownComponent } from '@gbrepo/ui';
@@ -21,6 +27,8 @@ import { ButtonComponent, DropdownComponent } from '@gbrepo/ui';
 export class ImagesListFilterComponent {
   // * Inputs
   @Input() public form: ImageFormType | undefined;
+  // * Outputs
+  @Output() public formSubmit = new EventEmitter<void>();
 
   // * Variables
   public isMaximized = false;
@@ -29,14 +37,10 @@ export class ImagesListFilterComponent {
   // *******************
   // * EVENTS
   // *******************
-  onSubmit() {
-    console.log(this.form?.value);
-  }
-
-  toggleMaximize() {
+  onClickBtnToggleMaximize() {
     this.isMaximized = !this.isMaximized;
   }
-  toggleFormVisibility() {
+  onClickBtnToggleFormVisibility() {
     this.isFormVisible = !this.isFormVisible;
   }
 }
