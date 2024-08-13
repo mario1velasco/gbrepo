@@ -39,26 +39,31 @@ export class DropdownComponent implements ControlValueAccessor {
 
   // * Variables
   isOpen = false;
+  // * ControlValueAccessor functions
+  onChange = (value: unknown): void => {};
+  onTouched = () => {};
 
   // *************
   // * EVENTS
   // *************
   onCLickToggleDropdown() {
     this.isOpen = !this.isOpen;
+    this.onTouched();
   }
 
   onClickSelectOption(option: string) {
     this.selectedOption = option;
+    this.onChange(this.selectedOption);
+    this.onTouched();
     this.isOpen = false;
     this.cd.markForCheck();
     this.selectionChange.emit(option);
   }
   // * ControlValueAccessor implementation
-  onChange = () => {};
-  onTouched = () => {};
-
   writeValue(value: string): void {
     this.selectedOption = value;
+    this.onChange(this.selectedOption);
+    this.onTouched();
     this.cd.markForCheck();
   }
 
