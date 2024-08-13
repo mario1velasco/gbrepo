@@ -78,18 +78,4 @@ export class ImagesListResultsComponent {
       this.pageSizeChange.emit(this.pageSize() + 10);
     }
   }
-
-  /**********************
-   * PRIVATE FUNCTIONS *****
-   ************************/
-  private getDevice() {
-    const window = inject(DOCUMENT).defaultView!;
-    return fromEvent(window, 'resize').pipe(
-      startWith(window.innerWidth),
-      map(() => {
-        return window.innerWidth >= 1024 ? 'desktop' : 'mobile';
-      }),
-      distinctUntilChanged()
-    );
-  }
 }
