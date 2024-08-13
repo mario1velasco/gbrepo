@@ -6,14 +6,13 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe, NgIf } from '@angular/common';
-import { MillionPipe } from '@gbrepo/business';
 import { ImageService } from '../shared/services/image.service';
 import { Basic } from 'unsplash-js/dist/methods/photos/types';
 import { ButtonComponent } from '@gbrepo/ui';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf, MillionPipe, DatePipe, ButtonComponent],
+  imports: [NgIf, DatePipe, ButtonComponent],
   providers: [ImageService],
   selector: 'app-image',
   standalone: true,
