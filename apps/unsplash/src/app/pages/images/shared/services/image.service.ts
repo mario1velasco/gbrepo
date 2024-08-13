@@ -27,7 +27,7 @@ export class ImageService {
   constructor() {
     // Create an instance of the Unsplash API with your access key
     this.unsplash = createApi({
-      accessKey: 'XXXXXXX',
+      accessKey: 'jUlamOylY7AnQ6ySwEjDHD-ayY3OUVNA7lEeouODF40',
     });
   }
 
