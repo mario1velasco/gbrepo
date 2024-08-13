@@ -21,9 +21,6 @@ This monorepo manages the development of the Unsplash application and its associ
    - `npm install -g nx`
    - `npm install`
 
-Bash
-nx install
-
 ## Development
 
 ### Unsplash App
