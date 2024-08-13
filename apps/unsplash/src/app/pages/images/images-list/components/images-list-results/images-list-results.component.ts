@@ -11,7 +11,7 @@ import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
 import { ButtonComponent, PaginatorComponent } from '@gbrepo/ui';
 import { fromEvent, startWith, map, distinctUntilChanged } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ScrollEndDirective } from '@gbrepo/business';
+import { DeviceService, ScrollEndDirective } from '@gbrepo/business';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +30,7 @@ import { ScrollEndDirective } from '@gbrepo/business';
 export class ImagesListResultsComponent {
   // * Injectors
   private router = inject(Router);
+  private deviceService = inject(DeviceService);
 
   // * Inputs
   imagesList = input.required<BasicPhoto[]>();
@@ -41,7 +42,7 @@ export class ImagesListResultsComponent {
   pageSizeChange = output<number>();
 
   // * Variables
-  public device = toSignal(this.getDevice());
+  public device = toSignal(this.deviceService.getDevice());
 
   /**
    * The trackByImageId function in TypeScript returns the unique identifier of a image item based on
