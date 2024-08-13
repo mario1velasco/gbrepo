@@ -11,11 +11,13 @@ import { ImageService } from '../shared/services/image.service';
 import { ImageFormType, OrderBy } from '../shared/image.types';
 import { ImagesListResultsComponent } from './components/images-list-results/images-list-results.component';
 import { FormBuilder, Validators } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { NgIf } from '@angular/common';
 import { ImagesListFilterComponent } from './components/images-list-filter/images-list-filter.component';
 import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
 import { IMAGE_LIST_MOCK } from './mock/image-list.mock';
+import { DeviceService } from '@gbrepo/business';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,8 +34,10 @@ export class ImagesListComponent implements OnInit {
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
   private cd = inject(ChangeDetectorRef);
+  private deviceService = inject(DeviceService);
 
   // * Variables
+  public device = toSignal(this.deviceService.getDevice());
   public imagesList: BasicPhoto[] = [];
   public form: ImageFormType = this.fb.group({
     orderBy: ['', Validators.required],
@@ -70,10 +74,18 @@ export class ImagesListComponent implements OnInit {
     //     // this.allImagesList = imagesList;
     //     this.cd.markForCheck();
     //   });
+    // TODO On desktop we dont trigger this
     this.form.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        debounceTime(1000),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe((data) => {
-        this.updateImagesList(data);
+        if (this.device() === 'desktop') {
+          console.log('DESKTOP', data);
+          this.updateImagesList(data);
+        }
       });
   }
 
@@ -88,6 +100,10 @@ export class ImagesListComponent implements OnInit {
   onPageSizeChange(newPageSize: number) {
     this.searchPhotos('nature', this.currentPage(), newPageSize);
     this.pageSize.set(newPageSize);
+  }
+  onSubmitFiltersForm() {
+    console.log('Mobile and Tablet', this.form.value);
+    this.updateImagesList(this.form.value);
   }
 
   // *****************
@@ -118,6 +134,7 @@ export class ImagesListComponent implements OnInit {
   private updateImagesList(
     formValues: Partial<{ orderBy: string | null; type: string | null }>
   ): void {
+    debugger;
     // this.imagesList = this.allImagesList.filter((image) => {
     //   if (
     //     form.title &&
