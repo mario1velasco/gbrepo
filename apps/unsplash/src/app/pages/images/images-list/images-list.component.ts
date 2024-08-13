@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { ImageService } from '../shared/services/image.service';
-import { ImageFormType, OrderBy } from '../shared/image.types';
+import { ImageFormType, isOrderBy, OrderBy } from '../shared/image.types';
 import { ImagesListResultsComponent } from './components/images-list-results/images-list-results.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
@@ -113,7 +113,7 @@ export class ImagesListComponent implements OnInit {
     type = 'nature',
     currentPage = 1,
     pageSize = 10,
-    orderBy?: OrderBy
+    orderBy: OrderBy = 'relevant'
   ): void {
     this.imageService
       .searchPhotos(type, currentPage, pageSize, undefined, undefined, orderBy)
@@ -135,6 +135,19 @@ export class ImagesListComponent implements OnInit {
     formValues: Partial<{ orderBy: string | null; type: string | null }>
   ): void {
     debugger;
+    let { orderBy, type } = formValues;
+    if (typeof orderBy !== 'string' || !isOrderBy(orderBy)) {
+      orderBy = 'relevant';
+    }
+    if (typeof type !== 'string') {
+      type = 'nature';
+    }
+    this.searchPhotos(
+      type,
+      this.currentPage(),
+      this.pageSize(),
+      orderBy as OrderBy
+    );
     // this.imagesList = this.allImagesList.filter((image) => {
     //   if (
     //     form.title &&
