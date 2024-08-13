@@ -15,6 +15,7 @@ import {
 } from 'unsplash-js/dist/methods/topics/types';
 import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
 import { LocalStorageService } from '@gbrepo/business';
+import { OrderBy as OrderByType } from '../image.types';
 
 @Injectable()
 export class ImageService {
@@ -26,7 +27,7 @@ export class ImageService {
   constructor() {
     // Create an instance of the Unsplash API with your access key
     this.unsplash = createApi({
-      accessKey: 'XXXXXXX', // Replace with your actual access key
+      accessKey: 'XXXXXXX',
     });
   }
 
@@ -56,7 +57,7 @@ export class ImageService {
     perPage = 10,
     color?: ColorId,
     orientation?: Orientation,
-    orderBy: 'relevant' | 'latest' | 'editorial' = 'relevant'
+    orderBy: OrderByType = 'relevant'
   ) {
     return this.handleUnsplashResponse<{
       results: BasicPhoto[];

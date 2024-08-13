@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { ImageService } from '../shared/services/image.service';
-import { ImagesList } from '../shared/image.types';
+import { ImageFormType, OrderBy } from '../shared/image.types';
 import { ImagesListResultsComponent } from './components/images-list-results/images-list-results.component';
 import { FormBuilder } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -35,9 +35,9 @@ export class ImagesListComponent implements OnInit {
 
   // * Variables
   public imagesList: BasicPhoto[] = [];
-  public form = this.fb.group({
-    title: [''],
-    releaseYear: [''],
+  public form: ImageFormType = this.fb.group({
+    orderBy: [''],
+    type: [''],
   });
   public currentPage = signal(1);
   public pageSize = signal(10);
@@ -93,9 +93,14 @@ export class ImagesListComponent implements OnInit {
   // *****************
   // * Private methods
   // *****************
-  private searchPhotos(type = 'nature', currentPage = 1, pageSize = 10): void {
+  private searchPhotos(
+    type = 'nature',
+    currentPage = 1,
+    pageSize = 10,
+    orderBy?: OrderBy
+  ): void {
     this.imageService
-      .searchPhotos(type, currentPage, pageSize)
+      .searchPhotos(type, currentPage, pageSize, undefined, undefined, orderBy)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((imagesList) => {
         this.imagesList = imagesList.results ? imagesList.results : [];
@@ -111,10 +116,7 @@ export class ImagesListComponent implements OnInit {
    * `null`.
    */
   private updateImagesList(
-    form: Partial<{
-      title: string | null;
-      releaseYear: string | null;
-    }>
+    formValues: Partial<{ orderBy: string | null; type: string | null }>
   ): void {
     // this.imagesList = this.allImagesList.filter((image) => {
     //   if (
