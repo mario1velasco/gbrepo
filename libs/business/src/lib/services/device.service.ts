@@ -19,7 +19,15 @@ export class DeviceService {
     return fromEvent(window, 'resize').pipe(
       startWith(window.innerWidth),
       map(() => {
-        return window.innerWidth >= 1024 ? 'desktop' : 'mobile';
+        const mobile = window.innerWidth < 768;
+        const tablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+        if (mobile) {
+          return 'mobile';
+        }
+        if (tablet) {
+          return 'tablet';
+        }
+        return 'desktop';
       }),
       distinctUntilChanged()
     );
