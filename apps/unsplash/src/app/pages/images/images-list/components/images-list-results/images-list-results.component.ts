@@ -36,6 +36,7 @@ export class ImagesListResultsComponent {
   currentPage = input.required<number>();
   pageSize = input.required<number>();
   total = input.required<number>();
+  totalPages = input.required<number>();
   // * Outputs
   pageChange = output<number>();
   pageSizeChange = output<number>();

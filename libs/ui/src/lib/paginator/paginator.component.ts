@@ -26,6 +26,7 @@ export class PaginatorComponent {
   currentPage = input.required<number>();
   pageSize = input.required<number>();
   total = input.required<number>();
+  totalPages = input.required<number>();
   @Output() pageChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();
 
@@ -43,10 +44,6 @@ export class PaginatorComponent {
     return Math.min(this.currentPage() * this.pageSize(), this.total());
   }
 
-  get totalPages() {
-    return Math.ceil(this.total() / this.pageSize());
-  }
-
   // *************
   // * EVENTS
   // *************
@@ -62,13 +59,13 @@ export class PaginatorComponent {
   }
 
   onNextPage() {
-    if (this.currentPage() < this.totalPages) {
+    if (this.currentPage() < this.totalPages()) {
       this.pageChange.emit(this.currentPage() + 1);
     }
   }
 
   onLastPage() {
-    this.pageChange.emit(this.totalPages);
+    this.pageChange.emit(this.totalPages());
   }
 
   onPageSizeChange(newPageSize: string) {

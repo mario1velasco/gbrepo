@@ -46,6 +46,7 @@
         [currentPage]="currentPage()"
         [pageSize]="pageSize()"
         [total]="total()"
+        [totalPages]="totalPages()"
         (pageChange)="pageChange.emit($event)"
         (pageSizeChange)="pageSizeChange.emit($event)"
       ></ui-paginator>
