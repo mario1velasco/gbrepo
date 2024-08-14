@@ -51,25 +51,30 @@ export class PaginatorComponent {
 
   onFirstPage() {
     this.pageChange.emit(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   onPreviousPage() {
     if (this.currentPage() > 1) {
       this.pageChange.emit(this.currentPage() - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
   onNextPage() {
     if (this.currentPage() < this.totalPages()) {
       this.pageChange.emit(this.currentPage() + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
   onLastPage() {
     this.pageChange.emit(this.totalPages() - 1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   onPageSizeChange(newPageSize: string) {
     this.pageSizeChange.emit(parseInt(newPageSize, 10));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
