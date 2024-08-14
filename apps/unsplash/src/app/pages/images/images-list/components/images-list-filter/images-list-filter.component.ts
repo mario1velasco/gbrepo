@@ -29,6 +29,7 @@ export class ImagesListFilterComponent {
   @Input() public form: ImageFormType | undefined;
   // * Outputs
   @Output() public formSubmit = new EventEmitter<void>();
+  @Output() public formReset = new EventEmitter<void>();
 
   // * Variables
   public isMaximized = false;
