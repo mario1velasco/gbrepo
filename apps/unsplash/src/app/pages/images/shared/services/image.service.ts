@@ -15,7 +15,7 @@ import {
 } from 'unsplash-js/dist/methods/topics/types';
 import { Basic as BasicPhoto } from 'unsplash-js/dist/methods/photos/types';
 import { LocalStorageService } from '@gbrepo/business';
-import { ImagesPaginator, OrderBy as OrderByType } from '../image.types';
+import { ImagesLastSearchData, OrderBy as OrderByType } from '../image.types';
 
 @Injectable()
 export class ImageService {
@@ -36,34 +36,37 @@ export class ImageService {
   // ***********************************
 
   /**
-   * The function saves the imagesPaginator data to local storage using the localStorageService.
-   * @param {ImagesPaginator} imagesPaginator - The `imagesPaginator` parameter is an object of type
-   * `ImagesPaginator`, which likely contains information related to paginating through a collection of
+   * The function saves the imagesLastSearchData data to local storage using the localStorageService.
+   * @param {ImagesLastSearchData} imagesLastSearchData - The `imagesLastSearchData` parameter is an object of type
+   * `ImagesLastSearchData`, which likely contains information related to paginating through a collection of
    * images.
    */
-  set imagesPaginator(imagesPaginator: ImagesPaginator) {
-    this.localStorageService.saveData('imagesPaginator', imagesPaginator);
+  set imagesLastSearchData(imagesLastSearchData: ImagesLastSearchData) {
+    this.localStorageService.saveData(
+      'imagesLastSearchData',
+      imagesLastSearchData
+    );
   }
 
   /**
    * This function retrieves data from local storage for pagination of images.
-   * @returns An array of imagesPaginator data is being returned. If there is no data stored in the
-   * 'imagesPaginator' key in the localStorageService, an empty array is returned.
+   * @returns An array of imagesLastSearchData data is being returned. If there is no data stored in the
+   * 'imagesLastSearchData' key in the localStorageService, an empty array is returned.
    */
-  get imagesPaginator() {
-    return this.localStorageService.getData('imagesPaginator') || [];
+  get imagesLastSearchData() {
+    return this.localStorageService.getData('imagesLastSearchData') || [];
   }
 
   /**
    * The function `findPhoto` searches for a photo by its ID within a collection of images.
    * @param {string} id - The `id` parameter is a string that represents the unique identifier of the
-   * photo you want to find in the `imagesPaginator` results. The `findPhoto` function searches for a
+   * photo you want to find in the `imagesLastSearchData` results. The `findPhoto` function searches for a
    * photo with the specified `id` within the results array and returns the photo object if found.
-   * @returns The `findPhoto` function is returning the photo object from the `imagesPaginator.results`
+   * @returns The `findPhoto` function is returning the photo object from the `imagesLastSearchData.results`
    * array that has the specified `id`.
    */
   findPhoto(id: string) {
-    return this.imagesPaginator.results.find((photo) => photo.id === id);
+    return this.imagesLastSearchData.results.find((photo) => photo.id === id);
   }
 
   // ***********************************

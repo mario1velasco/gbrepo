@@ -20,10 +20,12 @@ export function isOrderBy(value: string): value is OrderBy {
   return ['relevant', 'latest', 'editorial'].includes(value);
 }
 
-export type ImagesPaginator = {
+export type ImagesLastSearchData = {
   results: Basic[];
   total: number;
   totalPages: number;
   pageSize: number;
   currentPage: number;
+  orderBy: OrderBy | null;
+  type: string | null;
 };

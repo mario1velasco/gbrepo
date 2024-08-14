@@ -40,7 +40,7 @@ export class ImagesListComponent implements OnInit {
   public device = toSignal(this.deviceService.getDevice());
   public imagesList: BasicPhoto[] = [];
   public form: ImageFormType = this.fb.group({
-    orderBy: ['', Validators.required],
+    orderBy: ['relevant', Validators.required],
     type: ['', Validators.required],
   });
   public currentPage = signal(1);
@@ -56,7 +56,7 @@ export class ImagesListComponent implements OnInit {
    * component properties and make API calls.
    */
   ngOnInit(): void {
-    // ? We mock the initial called API to don't reach the limit very fast
+    // ? We mock the initial called API to don't reach the limit of UNSPLASH API calls very fast
     this.loadDataWithoutAPICall();
     this.onDesktopFormValuesChange();
   }
@@ -71,7 +71,7 @@ export class ImagesListComponent implements OnInit {
    * which the user wants to navigate.
    */
   onPageChange(newPage: number) {
-    this.searchPhotos('nature', newPage, this.pageSize());
+    this.searchPhotos(newPage, this.pageSize());
     this.currentPage.set(newPage);
   }
 
@@ -82,14 +82,15 @@ export class ImagesListComponent implements OnInit {
    * page size for displaying search results for photos of nature.
    */
   onPageSizeChange(newPageSize: number) {
-    this.searchPhotos('nature', this.currentPage(), newPageSize);
+    this.searchPhotos(this.currentPage(), newPageSize);
     this.pageSize.set(newPageSize);
   }
   /**
    * The onSubmitFiltersForm function updates the images list based on the values in the form.
    */
   onSubmitFiltersForm() {
-    this.updateImagesList(this.form.value);
+    this.currentPage.set(1);
+    this.updateImagesList();
   }
 
   /**
@@ -103,42 +104,57 @@ export class ImagesListComponent implements OnInit {
         distinctUntilChanged(),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((data) => {
+      .subscribe(() => {
         if (this.device() === 'desktop') {
-          this.updateImagesList(data);
+          this.currentPage.set(1);
+          this.updateImagesList();
         }
       });
+  }
+
+  /**
+   * The function `onResetSearch` resets form values and pagination settings before updating the images
+   * list.
+   */
+  onResetSearch() {
+    this.form.reset();
+    this.pageSize.set(10);
+    this.currentPage.set(1);
+    this.total.set(0);
+    this.totalPages.set(0);
+    this.updateImagesList();
   }
 
   // *****************
   // * Private methods
   // *****************
   /**
-   * The `searchPhotos` function in TypeScript searches for photos based on specified parameters and
-   * updates the images list accordingly.
-   * @param [type=nature] - The `type` parameter in the `searchPhotos` function specifies the type of
-   * photos to search for. By default, it is set to 'nature', meaning that the function will search for
-   * nature-related photos. However, you can provide a different type as an argument when calling the
-   * function to search for
+   * The function `searchPhotos` searches for photos based on specified criteria and updates the images
+   * list accordingly.
    * @param [currentPage=1] - The `currentPage` parameter in the `searchPhotos` function represents the
-   * current page number of the search results that are being retrieved. It is used to determine which
-   * page of results to fetch from the server.
-   * @param [pageSize=10] - The `pageSize` parameter in the `searchPhotos` function determines the
-   * number of photos to be displayed per page in the search results. In this case, the default value
-   * for `pageSize` is set to 10, meaning that by default, 10 photos will be shown on each page of the
-   * @param {OrderBy} [orderBy=relevant] - The `orderBy` parameter in the `searchPhotos` function is
-   * used to specify the order in which the photos should be retrieved. It is of type `OrderBy` which
-   * seems to be an enum or a custom type that defines different sorting options such as 'relevant',
-   * 'latest', 'popular', etc
+   * current page number of the paginated search results. It is used to determine which page of results
+   * to fetch from the backend. The default value for `currentPage` is 1, meaning that by default, the
+   * function will fetch the
+   * @param [pageSize=10] - The `pageSize` parameter in the `searchPhotos` function represents the
+   * number of photos to be displayed per page in the search results. In this case, it is set to a
+   * default value of 10 if not specified. This means that when the function is called, it will
+   * retrieve and display up
    */
-  private searchPhotos(
-    type = 'nature',
-    currentPage = 1,
-    pageSize = 10,
-    orderBy: OrderBy = 'relevant'
-  ): void {
+  private searchPhotos(currentPage = 1, pageSize = 10): void {
+    let orderBy = this.form.controls.orderBy.value;
+    if (typeof orderBy !== 'string' || !isOrderBy(orderBy)) {
+      orderBy = 'relevant';
+    }
+    const type = this.form.controls.type.value || 'nature';
     this.imageService
-      .searchPhotos(type, currentPage, pageSize, undefined, undefined, orderBy)
+      .searchPhotos(
+        type,
+        currentPage,
+        pageSize,
+        undefined,
+        undefined,
+        orderBy as OrderBy
+      )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((imagesList) => {
         this.imagesList = imagesList.results ? imagesList.results : [];
@@ -149,60 +165,66 @@ export class ImagesListComponent implements OnInit {
       });
   }
   /**
-   * The function `updateImagesList` filters a list of images based on provided title and release year
-   * criteria.
-   * @param data - The `updateImagesList` method takes a parameter `data` which is a partial object
-   * with optional properties `title` and `releaseYear`. These properties can be either a string or
-   * `null`.
+   * The function `updateImagesList` calls a method to search for photos based on the current page and
+   * page size, and then marks the component for check.
    */
-  private updateImagesList(
-    formValues: Partial<{ orderBy: string | null; type: string | null }>
-  ): void {
-    let { orderBy, type } = formValues;
-    if (typeof orderBy !== 'string' || !isOrderBy(orderBy)) {
-      orderBy = 'relevant';
-    }
-    if (typeof type !== 'string' || type === '') {
-      type = 'nature';
-    }
-    this.searchPhotos(
-      type,
-      this.currentPage(),
-      this.pageSize(),
-      orderBy as OrderBy
-    );
+  private updateImagesList(): void {
+    this.searchPhotos(this.currentPage(), this.pageSize());
     this.cd.markForCheck();
   }
 
+  /**
+   * The function `saveImagesPaginator` saves image search data including results, total count,
+   * pagination details, and search parameters.
+   * @param imagesList - The `imagesList` parameter is an object that contains the following
+   * properties:
+   */
   private saveImagesPaginator(imagesList: {
     results: BasicPhoto[];
     total: number;
     total_pages: number;
   }): void {
-    const imagesPaginator = {
+    let orderBy = this.form.controls.orderBy.value;
+    if (typeof orderBy !== 'string' || !isOrderBy(orderBy)) {
+      orderBy = 'relevant';
+    }
+    const imagesLastSearchData = {
       results: imagesList.results,
       total: imagesList.total,
       totalPages: imagesList.total_pages,
       pageSize: this.pageSize(),
       currentPage: this.currentPage(),
+      orderBy: orderBy as OrderBy,
+      type: this.form.controls.type.value,
     };
-    this.imageService.imagesPaginator = imagesPaginator;
+    this.imageService.imagesLastSearchData = imagesLastSearchData;
   }
 
+  /**
+   * The function `loadDataWithoutAPICall` sets data values based on either the results from an image
+   * service or mock data.
+   */
   private loadDataWithoutAPICall() {
     this.imagesList =
-      this.imageService.imagesPaginator.results || IMAGE_LIST_MOCK.results;
+      this.imageService.imagesLastSearchData.results || IMAGE_LIST_MOCK.results;
     const total =
-      this.imageService.imagesPaginator.total || IMAGE_LIST_MOCK.total;
+      this.imageService.imagesLastSearchData.total || IMAGE_LIST_MOCK.total;
     const totalPages =
-      this.imageService.imagesPaginator.totalPages ||
+      this.imageService.imagesLastSearchData.totalPages ||
       IMAGE_LIST_MOCK.total_pages;
-    const pageSize = this.imageService.imagesPaginator.pageSize || 10;
-    const currentPage = this.imageService.imagesPaginator.currentPage || 1;
+    const pageSize = this.imageService.imagesLastSearchData.pageSize || 10;
+    const currentPage = this.imageService.imagesLastSearchData.currentPage || 1;
     this.total.set(total);
     this.totalPages.set(totalPages);
     this.pageSize.set(pageSize);
     this.currentPage.set(currentPage);
+    // We set the form values
+    this.form.controls.orderBy.setValue(
+      this.imageService.imagesLastSearchData.orderBy || 'relevant'
+    );
+    this.form.controls.type.setValue(
+      this.imageService.imagesLastSearchData.type || ''
+    );
     this.cd.markForCheck();
   }
 }
