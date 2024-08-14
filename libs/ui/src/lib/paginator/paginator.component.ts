@@ -1,9 +1,7 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
-  inject,
   input,
   Output,
 } from '@angular/core';
@@ -34,7 +32,7 @@ export class PaginatorComponent {
   @Output() pageSizeChange = new EventEmitter<number>();
 
   // * Variables
-  pageSizeOptions = ['10', '20', '50'];
+  pageSizeOptions = ['10', '20', '30'];
 
   // *************
   // * GETTERS
@@ -68,7 +66,7 @@ export class PaginatorComponent {
   }
 
   onLastPage() {
-    this.pageChange.emit(this.totalPages());
+    this.pageChange.emit(this.totalPages() - 1);
   }
 
   onPageSizeChange(newPageSize: string) {
