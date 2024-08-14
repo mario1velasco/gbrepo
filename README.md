@@ -85,23 +85,115 @@ This UI library provides a set of reusable Angular components for building user 
 
 - **Button**
 
-  - Basic button functionality with customization options.
-  - Thoroughly tested with unit tests.
-  - Styled with Tailwind.
-  - Visually documented with Storybook stories.
+  A versatile button component for your Angular applications, offering essential functionality and styling flexibility.
+
+  ### Features
+
+  - **Basic Button Functionality**: Handles click events and can be used as either a standard button or a submit button.
+  - **Customizable**:
+    - `disabled` (boolean): Disables the button when set to `true`.
+    - `type` ('button' | 'submit'): Specifies the button type.
+    - `text` (string): Sets the button's text content.
+  - **Accessibility**: Implements appropriate ARIA attributes for screen readers and assistive technologies.
+  - **Styling**:
+    - Leverages Tailwind CSS for easy customization.
+    - Provides default styles for a visually appealing button.
+    - Includes hover, active, and disabled states.
+
+  ### Usage
+
+  ```html
+  <ui-button [disabled]="isDisabled" [type]="buttonType" [text]="buttonText" (btnClick)="handleButtonClick()"> </ui-button>
+  ```
+
+  ### Properties
+
+  - `disabled` (boolean): Controls whether the button is disabled.
+  - `type` ('button' | 'submit'): Sets the type of the button.
+  - `text` (string): Defines the text displayed on the button.
+
+  ### Events
+
+  - `btnClick`: Emits an event when the button is clicked.
+
+  ### Styling
+
+  The button's appearance can be easily customized using Tailwind CSS classes. You can override the default styles or add new ones to match your application's design.
 
 - **Dropdown**
 
-  - Provides a dropdown selection interface.
-  - Styled with Tailwind.
-  - Implement ControlValueAccessor
+  A user-friendly and versatile dropdown component that simplifies selection from a list of options and seamlessly integrates with Angular forms.
+
+  ### Features
+
+  - **Selection Made Easy:** Presents a clear and intuitive dropdown interface for users to select from a list of options.
+  - **Customizable:**
+    - `options` (string[]): An array of strings defining the available options in the dropdown.
+    - `placeholder` (string): Customizable placeholder text displayed when no option is selected.
+    - `selectedOption` (string | null): Reflects the currently selected option or `null` if none is chosen.
+  - **Form-Friendly:** Implements `ControlValueAccessor` for seamless two-way data binding with Angular forms, making it ideal for input fields.
+  - **Accessibility-First:** Utilizes appropriate ARIA attributes to ensure compatibility with screen readers and assistive technologies.
+  - **Styling:** Leverages Tailwind CSS for easy and flexible customization of the dropdown's appearance.
+
+  ### Usage
+
+  ```html
+  <ui-dropdown [options]="dropdownOptions" [placeholder]="dropdownPlaceholder" [(ngModel)]="selectedValue" (selectionChange)="handleSelectionChange($event)"> </ui-dropdown>
+  ```
+
+  ### Properties
+
+  - `options` (string[]): The array of options to be displayed in the dropdown list.
+  - `placeholder` (string): The text shown within the dropdown when no option is selected.
+  - `selectedOption` (string | null): The currently selected option or `null` if no selection has been made.
+
+  ### Events
+
+  - `selectionChange`: Emits the newly selected option whenever a user makes a selection from the dropdown.
+
+  ### Form Integration
+
+  The `DropdownComponent` implements the `ControlValueAccessor` interface, enabling effortless integration with Angular's reactive forms or template-driven forms. You can use `ngModel` or other form directives to bind the selected value directly to your component's data.
+
+  ### Styling
+
+  You can easily tailor the dropdown's visual style to match your application's design using Tailwind CSS classes. Feel free to override the default styles or create your own custom styles to achieve the desired look and feel.
 
 - **Paginator**
 
-  - Enables pagination for displaying large sets of data.
-  - Styled with Tailwind.
-  - Use of Input signals
-  - Use of getters
+  A flexible and user-friendly pagination component for efficiently navigating through large datasets in your Angular applications.
+
+  ### Features:
+
+  - **Intuitive Navigation:** Provides clear controls for moving between pages, including first, previous, next, and last page buttons.
+  - **Adjustable Page Size:** Allows users to select the number of items to display per page using a dropdown.
+  - **Informative Display:** Shows the current page number, the range of items displayed (e.g., "Showing 1 to 10 of 50"), and the total number of pages.
+  - **Customizable:**
+    - `currentPage` (number): The current page number (required).
+    - `pageSize` (number): The number of items to display per page (required).
+    - `total` (number): The total number of items in the dataset (required).
+    - `totalPages` (number): The total number of pages calculated based on `total` and `pageSize` (required).
+  - **Reactive Updates:** Utilizes Angular signals (`input`) for efficient and reactive updates to the paginator's state.
+  - **Clean Code:** Employs getters to encapsulate logic and improve code readability.
+  - **Styling:** Leverages Tailwind CSS for easy customization of the paginator's appearance.
+
+  ### Events
+
+  - `pageChange`: Emits the new page number when the user navigates to a different page
+  - `pageSizeChange`: Emits the new page size when the user selects a different value from the page size dropdown
+
+  ### Usage
+
+  ```html
+  <ui-paginator [(currentPage)]="currentPage" [(pageSize)]="pageSize" [total]="totalItems" [totalPages]="totalPages" (pageChange)="handlePageChange($event)" (pageSizeChange)="handlePageSizeChange($event)"> </ui-paginator>
+  ```
+
+  ### Properties
+
+  - `currentPage` (number): The current page number (two-way binding).
+  - `pageSize` (number): The number of items to display per page (two-way binding).
+  - `total` (number): The total number of items in the dataset.
+  - `totalPages` (number): The total number of pages.
 
 # My Business Library
 
@@ -253,8 +345,9 @@ This Angular service provides a centralized way to interact with image-related d
 
 - **Image Management:**
 
-  - `photos` getter/setter: Stores and retrieves an array of `BasicPhoto` objects from local storage.
-  - `findPhoto(id)`: Locates a specific photo by its ID within the stored photos.
+  - `imagesLastSearchData` (setter): Saves image search pagination data to local storage.
+  - `imagesLastSearchData` (getter): Retrieves image search pagination data from local storage.
+  - `findPhoto`: Finds a specific photo within the last search results by its ID.
 
 - **Unsplash API Integration:**
 
