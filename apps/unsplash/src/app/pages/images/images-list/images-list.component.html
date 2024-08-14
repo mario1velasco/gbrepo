@@ -19,7 +19,9 @@
     *ngIf="form"
     [form]="form"
     (formSubmit)="onSubmitFiltersForm()"
+    (formReset)="onResetSearch()"
   ></app-images-list-filter>
+
   <app-images-list-results
     *ngIf="imagesList.length > 0"
     [imagesList]="imagesList"
@@ -30,4 +32,15 @@
     (pageSizeChange)="onPageSizeChange($event)"
     (pageChange)="onPageChange($event)"
   ></app-images-list-results>
+  <div *ngIf="imagesList.length === 0">
+    <div class="flex flex-col items-center justify-center h-64">
+      <h2 class="text-2xl font-semibold text-gray-700 mb-4">
+        No Results Found
+      </h2>
+      <p class="text-gray-500">
+        Your search didn't match any images. Please try refining your search
+        criteria or resetting the filters.
+      </p>
+    </div>
+  </div>
 </div>
