@@ -1,6 +1,87 @@
-<div class="flex flex-col items-center pt-28 gap-1 lg:gap-4">
-  <h1>Welcome images finder</h1>
-  <h2>Please click on the button below</h2>
-  <h5>you will load images module (lazy-loading)</h5>
-  <ui-button text="Go to images" (btnClick)="onClickButton()"></ui-button>
+<div class="flex flex-col min-h-screen bg-gray-100">
+  <header
+    class="bg-white shadow-md py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center"
+  >
+    <h1 class="text-3xl font-bold text-gray-900">Image Finder</h1>
+    <img
+      src="https://images.pexels.com/photos/3747463/pexels-photo-3747463.jpeg"
+      alt="Nature Image"
+      class="h-12 w-12 rounded-full object-cover"
+    />
+  </header>
+
+  <section
+    class="flex-grow flex flex-col items-center justify-center p-8 bg-gradient-to-r from-blue-400 to-purple-500 text-white"
+  >
+    <h2 class="text-4xl font-bold mb-4 text-center">
+      Discover Stunning Images
+    </h2>
+    <p class="text-lg text-center mb-8">
+      Explore a vast collection of high-quality photos, curated to inspire and
+      delight.
+    </p>
+    <ui-button
+      text="Explore Now"
+      (btnClick)="onClickButton()"
+      class="bg-white text-blue-500 hover:bg-gray-100 py-2 px-4 rounded"
+    ></ui-button>
+    <p class="mt-4 text-sm italic">
+      Image module is lazy-loaded for optimal performance.
+    </p>
+  </section>
+
+  <section class="py-12 px-4 sm:px-6 lg:px-8 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">
+        Key Features
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="flex flex-col items-center">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/54/54481.png"
+            alt="Search Icon"
+            class="h-16 w-16 mb-4"
+          />
+          <h4 class="text-xl font-semibold text-gray-900 mb-2">
+            Powerful Search
+          </h4>
+          <p class="text-gray-600 text-center">
+            Find the perfect image with our advanced search capabilities.
+          </p>
+        </div>
+
+        <div class="flex flex-col items-center">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2975/2975285.png"
+            alt="Collection Icon"
+            class="h-16 w-16 mb-4"
+          />
+          <h4 class="text-xl font-semibold text-gray-900 mb-2">
+            Curated Collections
+          </h4>
+          <p class="text-gray-600 text-center">
+            Browse through handpicked collections to discover hidden gems.
+          </p>
+        </div>
+
+        <div class="flex flex-col items-center">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/947/947616.png"
+            alt="Download Icon"
+            class="h-16 w-16 mb-4"
+          />
+          <h4 class="text-xl font-semibold text-gray-900 mb-2">
+            Easy Downloads
+          </h4>
+          <p class="text-gray-600 text-center">
+            Download images hassle-free for your projects.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-gray-800 py-4 px-4 sm:px-6 lg:px-8 text-center text-white">
+    <p>&copy; 2024 Image Finder. All rights reserved.</p>
+  </footer>
 </div>
