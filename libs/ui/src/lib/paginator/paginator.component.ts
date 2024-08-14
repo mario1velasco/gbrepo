@@ -19,15 +19,18 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginatorComponent {
-  // * Injectors
-  private cd = inject(ChangeDetectorRef);
-
   // * Inputs & Outputs
+  /** Current page number  */
   currentPage = input.required<number>();
+  /** Number of items per page  */
   pageSize = input.required<number>();
+  /** Total number of items  */
   total = input.required<number>();
+  /** Total number of pages  */
   totalPages = input.required<number>();
+  /** Event emitted when the current page changes */
   @Output() pageChange = new EventEmitter<number>();
+  /** Event emitted when the number of items per page changes */
   @Output() pageSizeChange = new EventEmitter<number>();
 
   // * Variables

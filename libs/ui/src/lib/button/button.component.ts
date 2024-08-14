@@ -9,8 +9,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
+  /** Disable the button */
   @Input() disabled = false;
+  /** The type of the button */
   @Input() type: 'button' | 'submit' = 'button';
+  /** The text of the button */
   @Input() text: string | undefined;
+  /** Event emitted when the button is clicked */
   @Output() btnClick = new EventEmitter<void>();
 }

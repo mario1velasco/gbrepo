@@ -32,9 +32,13 @@ export class DropdownComponent implements ControlValueAccessor {
   private cd = inject(ChangeDetectorRef);
 
   // * Inputs & Outputs
+  /** List of options to display in the dropdown */
   @Input() options: string[] = [];
+  /** Placeholder text for the dropdown */
   @Input() placeholder = 'Select an option';
+  /** Selected option */
   @Input() selectedOption: string | null = null;
+  /** Event emitted when the selected option changes */
   @Output() selectionChange = new EventEmitter<string>();
 
   // * Variables
