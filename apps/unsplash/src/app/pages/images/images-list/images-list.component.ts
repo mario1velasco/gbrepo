@@ -71,8 +71,8 @@ export class ImagesListComponent implements OnInit {
    * which the user wants to navigate.
    */
   onPageChange(newPage: number) {
-    this.searchPhotos(newPage, this.pageSize());
     this.currentPage.set(newPage);
+    this.searchPhotos(newPage, this.pageSize());
   }
 
   /**
@@ -82,8 +82,9 @@ export class ImagesListComponent implements OnInit {
    * page size for displaying search results for photos of nature.
    */
   onPageSizeChange(newPageSize: number) {
-    this.searchPhotos(this.currentPage(), newPageSize);
+    this.currentPage.set(1);
     this.pageSize.set(newPageSize);
+    this.searchPhotos(this.currentPage(), newPageSize);
   }
   /**
    * The onSubmitFiltersForm function updates the images list based on the values in the form.
