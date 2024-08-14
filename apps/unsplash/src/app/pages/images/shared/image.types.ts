@@ -1,4 +1,5 @@
 import { FormGroup, FormControl } from '@angular/forms';
+import { Basic } from 'unsplash-js/dist/methods/photos/types';
 
 export type ImageFormType = FormGroup<{
   orderBy: FormControl<string | null>;
@@ -18,3 +19,11 @@ export type OrderBy = 'relevant' | 'latest' | 'editorial';
 export function isOrderBy(value: string): value is OrderBy {
   return ['relevant', 'latest', 'editorial'].includes(value);
 }
+
+export type ImagesPaginator = {
+  results: Basic[];
+  total: number;
+  totalPages: number;
+  pageSize: number;
+  currentPage: number;
+};

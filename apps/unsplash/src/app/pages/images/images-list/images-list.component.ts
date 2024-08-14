@@ -46,6 +46,7 @@ export class ImagesListComponent implements OnInit {
   public currentPage = signal(1);
   public pageSize = signal(10);
   public total = signal(0);
+  public totalPages = signal(0);
 
   // *****************
   // * Lifecycle hooks
@@ -55,14 +56,9 @@ export class ImagesListComponent implements OnInit {
    * component properties and make API calls.
    */
   ngOnInit(): void {
-    // ? START: We mock the initial called API to don't reach the limit very fast
-    this.imagesList = IMAGE_LIST_MOCK.results;
-    this.imageService.photos = this.imagesList;
-    this.total.set(IMAGE_LIST_MOCK.total);
-    // ? END: We mock the initial called API to don't reach the limit very fast
-
+    // ? We mock the initial called API to don't reach the limit very fast
+    this.loadDataWithoutAPICall();
     this.onDesktopFormValuesChange();
-    this.cd.markForCheck();
   }
 
   // ************
@@ -146,7 +142,9 @@ export class ImagesListComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((imagesList) => {
         this.imagesList = imagesList.results ? imagesList.results : [];
-        this.imageService.photos = imagesList.results;
+        this.total.set(imagesList.total);
+        this.totalPages.set(imagesList.total_pages);
+        this.saveImagesPaginator(imagesList);
         this.cd.markForCheck();
       });
   }
@@ -173,6 +171,38 @@ export class ImagesListComponent implements OnInit {
       this.pageSize(),
       orderBy as OrderBy
     );
+    this.cd.markForCheck();
+  }
+
+  private saveImagesPaginator(imagesList: {
+    results: BasicPhoto[];
+    total: number;
+    total_pages: number;
+  }): void {
+    const imagesPaginator = {
+      results: imagesList.results,
+      total: imagesList.total,
+      totalPages: imagesList.total_pages,
+      pageSize: this.pageSize(),
+      currentPage: this.currentPage(),
+    };
+    this.imageService.imagesPaginator = imagesPaginator;
+  }
+
+  private loadDataWithoutAPICall() {
+    this.imagesList =
+      this.imageService.imagesPaginator.results || IMAGE_LIST_MOCK.results;
+    const total =
+      this.imageService.imagesPaginator.total || IMAGE_LIST_MOCK.total;
+    const totalPages =
+      this.imageService.imagesPaginator.totalPages ||
+      IMAGE_LIST_MOCK.total_pages;
+    const pageSize = this.imageService.imagesPaginator.pageSize || 10;
+    const currentPage = this.imageService.imagesPaginator.currentPage || 1;
+    this.total.set(total);
+    this.totalPages.set(totalPages);
+    this.pageSize.set(pageSize);
+    this.currentPage.set(currentPage);
     this.cd.markForCheck();
   }
 }

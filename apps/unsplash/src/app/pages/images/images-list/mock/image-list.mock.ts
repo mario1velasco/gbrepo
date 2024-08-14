@@ -1,6 +1,10 @@
 import { Basic } from 'unsplash-js/dist/methods/photos/types';
 
-export const IMAGE_LIST_MOCK = {
+export const IMAGE_LIST_MOCK: {
+  results: Basic[];
+  total: number;
+  total_pages: number;
+} = {
   total: 10000,
   total_pages: 1000,
   results: [
